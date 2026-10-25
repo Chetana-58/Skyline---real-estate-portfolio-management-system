@@ -101,10 +101,12 @@ CREATE TABLE Maintenance_Request (
     Cost DECIMAL(10, 2),
     Assigned_To VARCHAR(100),
     Notes TEXT,
-    Updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID) ON DELETE CASCADE,
-    FOREIGN KEY (Tenant_ID) REFERENCES Tenant(Tenant_ID) ON DELETE SET NULL,
-    -- Owner_ID is derivable via Property.Owner_ID; removed to satisfy 3NF
+    Updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (Property_ID)
+        REFERENCES Property(Property_ID)
+        ON DELETE CASCADE,
+    FOREIGN KEY (Tenant_ID) REFERENCES Tenant(Tenant_ID) ON DELETE SET NULL
 );
 
 -- Financial_Transaction table
@@ -161,8 +163,8 @@ CREATE TABLE Insurance_Offer (
     Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID) ON DELETE CASCADE,
-    FOREIGN KEY (Tenant_ID) REFERENCES Tenant(Tenant_ID) ON DELETE CASCADE,
-    -- Owner_ID is derivable via Property.Owner_ID; removed to satisfy 3NF
+    FOREIGN KEY (Tenant_ID) REFERENCES Tenant(Tenant_ID) ON DELETE CASCADE
+    
 );
 
 -- Property_Document table
@@ -206,8 +208,8 @@ CREATE TABLE IF NOT EXISTS Payment (
     Late_Fee DECIMAL(10, 2) DEFAULT 0,
     Notes TEXT,
     Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (Lease_ID) REFERENCES Lease(Lease_ID) ON DELETE CASCADE,
-    -- Tenant_ID is derivable via Lease.Tenant_ID; removed to satisfy 3NF
+    FOREIGN KEY (Lease_ID) REFERENCES Lease(Lease_ID) ON DELETE CASCADE
+   
 );
 
 -- Notification table for real-time updates
@@ -274,11 +276,11 @@ CREATE TABLE IF NOT EXISTS PurchaseRequest (
 );
 
 -- Create indexes for better query performance
-CREATE INDEX IF NOT EXISTS idx_property_status ON Property(Status);
-CREATE INDEX IF NOT EXISTS idx_property_listing_type ON Property(Listing_Type);
-CREATE INDEX IF NOT EXISTS idx_notification_user ON Notification(User_Type, User_ID, Is_Read);
-CREATE INDEX IF NOT EXISTS idx_payment_status ON Payment(Status, Due_Date);
-CREATE INDEX IF NOT EXISTS idx_lease_status ON Lease(Status);
-CREATE INDEX IF NOT EXISTS idx_maintenance_status ON Maintenance_Request(Status, Property_ID);
+CREATE INDEX idx_property_status ON Property(Status);
+CREATE INDEX idx_property_listing_type ON Property(Listing_Type);
+CREATE INDEX idx_notification_user ON Notification(User_Type, User_ID, Is_Read);
+CREATE INDEX idx_payment_status ON Payment(Status, Due_Date);
+CREATE INDEX idx_lease_status ON Lease(Status);
+CREATE INDEX idx_maintenance_status ON Maintenance_Request(Status, Property_ID);
 
 -- Note: For sample data and initial setup, run init.sql after this schema file
