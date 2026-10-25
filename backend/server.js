@@ -38,18 +38,6 @@ app.use('/api/auth', require('./routes/auth'));
 
 const PORT = process.env.PORT || 5000;
 
-// Serve React app (SPA) in production and provide a catch-all for client routes
-const clientBuildPath = path.join(__dirname, '..', 'frontend', 'build');
-app.use(express.static(clientBuildPath));
-
-// For any non-API route, send back index.html so React Router can handle it
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api/')) return next();
-  res.sendFile(path.join(clientBuildPath, 'index.html'), (err) => {
-    if (err) next(err);
-  });
-});
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
